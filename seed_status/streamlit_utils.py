@@ -1,7 +1,9 @@
 import requests
+import streamlit
 from bs4 import BeautifulSoup
 
 
+@streamlit.cache_data(ttl=3600)
 def fetch_data_from_protocol(protocol_number: str):
     print(f"""Fetching data for {protocol_number}""")
     r = requests.get(
