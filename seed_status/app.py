@@ -18,7 +18,7 @@ wrong_protocol_numbers = []
 
 if protocolo_input:
     ds = []
-    for protocol_number in set(protocol_numbers[-5:]):
+    for protocol_number in set(protocol_numbers):
         try:
             items = {}
             # Thu Apr 04 13:30:00 BRT 2024
