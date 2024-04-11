@@ -6,7 +6,7 @@ from streamlit_utils import fetch_data_from_protocol
 
 def process_time(x: str):
     date = pd.Timestamp(x).to_pydatetime()
-    return date.strftime("%D %H:%M:%S")
+    return date.strftime("%d/%m/%y %H:%M:%S")
 
 
 st.title("Protocolos prioritários - Escritório de Projetos")
