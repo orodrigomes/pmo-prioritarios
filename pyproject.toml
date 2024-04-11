@@ -6,7 +6,11 @@ authors = ["Gabriel Fior <fior.gbm@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
+streamlit = "^1.33.0"
+pandas = "^2.2.2"
+beautifulsoup4 = "^4.12.3"
+requests = "^2.31.0"
 
 
 [build-system]
