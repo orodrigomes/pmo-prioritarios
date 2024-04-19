@@ -36,7 +36,9 @@ if protocolo_input:
             wrong_protocol_numbers.append(protocol_number)
 
     df = pd.DataFrame(ds)
-    df["Enviado em:"] = df["Enviado em:"].apply(process_time)
+    df["Enviado em:"] = (
+        df["Enviado em:"].apply(process_time) if "Enviado em:" in df else None
+    )
     st.dataframe(df)
 
 if wrong_protocol_numbers:
