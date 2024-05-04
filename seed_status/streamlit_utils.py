@@ -1,3 +1,5 @@
+import asyncio
+
 import requests
 import streamlit
 from bs4 import BeautifulSoup
@@ -28,3 +30,26 @@ def fetch_data_from_protocol(protocol_number: str):
             label = None
     # d['datetime_'] = datetime.datetime.utcnow()
     return d
+
+
+async def fetch_protocolo(protocol_number: str):
+    try:
+        clean_protocol_number = protocol_number.replace("-", "").replace(".", "")
+        ds = fetch_data_from_protocol(clean_protocol_number)
+        ds['protocolo'] = protocol_number
+        return ds
+    except Exception as e:
+        print(f"Exception occured {protocol_number}", e)
+        return {}
+
+
+async def fetch_all_protocols(protocol_numbers: list[str]):
+    print('start')
+    L = await asyncio.gather(
+        *[fetch_protocolo(i) for i in protocol_numbers]
+    )
+    return L
+
+
+def sync_main(protocol_numbers):
+    return asyncio.run(fetch_all_protocols(protocol_numbers))
