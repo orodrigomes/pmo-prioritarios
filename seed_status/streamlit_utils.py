@@ -26,5 +26,5 @@ def fetch_data_from_protocol(protocol_number: str):
         if tag.attrs["class"] == ["form_value"]:
             d[label] = tag.text
             label = None
-
+    # d['datetime_'] = datetime.datetime.utcnow()
     return d
