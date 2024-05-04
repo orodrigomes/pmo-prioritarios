@@ -50,7 +50,7 @@ if protocolo_input:
         try:
             return x.split(sep)[index]
         except:
-            return None
+            return ""
 
 
     df['N1- Órgao'] = df['Onde está:'].apply(lambda x: extract_nucleo(x, "-", 0))
