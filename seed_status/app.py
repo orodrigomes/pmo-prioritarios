@@ -44,6 +44,7 @@ if protocolo_input:
     if "Enviado em:" in df:
         df["Enviado em:"] = df["Enviado em:"].apply(process_time)
         df['dias_parado'] = df["Enviado em:"].apply(lambda x: safe_to_int(x))
+        df['Movimentação'] = df['dias_parado'].apply(lambda x: "ANDOU!" if 0 <= x <= 1 else "")
 
 
     def extract_nucleo(x, sep, index):
@@ -65,8 +66,9 @@ if protocolo_input:
     df.sort_values(by="protocolo", ascending=True, inplace=True)
 
     column_order = ["protocolo", "Dias em trâmite"]
-    column_order += [i for i in df.columns if i not in column_order and i != 'dias_parado']
+    column_order += [i for i in df.columns if i not in column_order and i not in ['dias_parado', 'Movimentação']]
     column_order += ['dias_parado']
+    column_order += ['Movimentação']
     st.dataframe(df.style.applymap(color_vowel, subset=["dias_parado"]), hide_index=True,
                  column_order=column_order)
 

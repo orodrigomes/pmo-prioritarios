@@ -1,11 +1,11 @@
 import asyncio
 
 import requests
-import streamlit
+import streamlit as st
 from bs4 import BeautifulSoup
 
 
-@streamlit.cache_data(ttl=3600)
+@st.cache_data(ttl=3600)
 def fetch_data_from_protocol(protocol_number: str):
     print(f"""Fetching data for {protocol_number}""")
     r = requests.get(
@@ -29,6 +29,7 @@ def fetch_data_from_protocol(protocol_number: str):
             d[label] = tag.text
             label = None
     # d['datetime_'] = datetime.datetime.utcnow()
+    st.session_state[protocol_number] = True
     return d
 
 
