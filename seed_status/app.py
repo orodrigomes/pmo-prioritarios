@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 
 st.set_page_config(layout="wide")
-from streamlit_utils import sync_main
+from seed_status.streamlit_utils import sync_main
 
 
 def process_time(x: str):
@@ -32,11 +32,8 @@ def safe_to_int(x):
     return int(days_diff)
 
 
-if protocolo_input:
-    ds = []
-    start = datetime.datetime.now()
+def build_dataframe_from_protocolos(protocol_numbers: list[str]):
     L = sync_main(list(set(protocol_numbers)))
-    st.write(f'elapsed {((datetime.datetime.now() - start).seconds)} sec')
     df = pd.DataFrame(L)
     df.dropna(inplace=True)
     df.drop(columns=["Dias Sobrestado:", "Dias Arquivo Corrente:", "Motivo:"], errors='ignore', inplace=True)
@@ -46,13 +43,11 @@ if protocolo_input:
         df['dias_parado'] = df["Enviado em:"].apply(lambda x: safe_to_int(x))
         df['Movimentação'] = df['dias_parado'].apply(lambda x: "ANDOU!" if 0 <= x <= 1 else "")
 
-
     def extract_nucleo(x, sep, index):
         try:
             return x.split(sep)[index]
         except:
             return ""
-
 
     df['N1- Órgao'] = df['Onde está:'].apply(lambda x: extract_nucleo(x, "-", 0))
     df['N2 - Diretoria'] = df['Onde está:'].apply(lambda x: extract_nucleo(x, "/", 1))
@@ -64,6 +59,15 @@ if protocolo_input:
                        'Total Dias em Trâmite:': 'Dias em trâmite'}, inplace=True)
 
     df.sort_values(by="protocolo", ascending=True, inplace=True)
+
+    return df
+
+
+if protocolo_input:
+    start = datetime.datetime.now()
+
+    df = build_dataframe_from_protocolos(protocol_numbers)
+    st.write(f'elapsed {((datetime.datetime.now() - start).seconds)} sec')
 
     column_order = ["protocolo", "Dias em trâmite"]
     column_order += [i for i in df.columns if i not in column_order and i not in ['dias_parado', 'Movimentação']]

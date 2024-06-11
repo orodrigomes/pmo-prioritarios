@@ -11,6 +11,8 @@ streamlit = "^1.33.0"
 pandas = "^2.2.2"
 beautifulsoup4 = "^4.12.3"
 requests = "^2.31.0"
+pydantic-settings = "2.3.2"
+sqlmodel = "^0.0.19"
 
 [build-system]
 requires = ["poetry-core"]
