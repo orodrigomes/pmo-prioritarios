@@ -12,7 +12,7 @@ TABLENAME = "protocolo_status"
 def build_engine():
     settings = Settings()
     engine = create_engine(
-        f'postgresql+psycopg2://{settings.db_user}:{settings.db_password}@{settings.db_host}/{settings.db_user}')
+        f'postgresql+psycopg2://{settings.db_user}:{settings.db_password}@{settings.db_host}/{settings.db_database}')
     return engine
 
 
