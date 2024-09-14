@@ -35,6 +35,9 @@ def safe_to_int(x):
 def build_dataframe_from_protocolos(protocol_numbers: list[str]):
     L = sync_main(list(set(protocol_numbers)))
     df = pd.DataFrame(L)
+    if df.empty:
+        print (f"Nenhuma informacao para protocolos {protocol_numbers}")
+        return df
     df.dropna(inplace=True)
     df.drop(columns=["Dias Sobrestado:", "Dias Arquivo Corrente:", "Motivo:"], errors='ignore', inplace=True)
 
@@ -67,17 +70,21 @@ if protocolo_input:
     start = datetime.datetime.now()
 
     df = build_dataframe_from_protocolos(protocol_numbers)
-    st.write(f'elapsed {((datetime.datetime.now() - start).seconds)} sec')
 
-    column_order = ["protocolo", "Dias em trâmite"]
-    column_order += [i for i in df.columns if i not in column_order and i not in ['dias_parado', 'Movimentação']]
-    column_order += ['dias_parado']
-    column_order += ['Movimentação']
-    st.dataframe(df.style.applymap(color_vowel, subset=["dias_parado"]), hide_index=True,
-                 column_order=column_order)
+    st.write(f'elapsed {((datetime.datetime.now() - start).seconds)} sec')
+    protocolos_fetched = []
+    if not df.empty:
+        column_order = ["protocolo", "Dias em trâmite"]
+        column_order += [i for i in df.columns if i not in column_order and i not in ['dias_parado', 'Movimentação']]
+        column_order += ['dias_parado']
+        column_order += ['Movimentação']
+        st.dataframe(df.style.applymap(color_vowel, subset=["dias_parado"]), hide_index=True,
+                     column_order=column_order)
+
+        protocolos_fetched = df['protocolo'].unique().tolist()
 
     st.write(
-        f"Protocolos com erro - {[i for i in list(set(protocol_numbers)) if i not in df['protocolo'].unique().tolist()]}")
+        f"Protocolos com erro - {[i for i in list(set(protocol_numbers)) if i not in protocolos_fetched]}")
 
 if wrong_protocol_numbers:
     st.text(f"Protocolos com erro: {wrong_protocol_numbers}")
